@@ -5,15 +5,14 @@ Url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR
 download.file(Url,destfile="./CourseProject/Dataset.zip")
 unzip(zipfile="./CourseProject/Dataset.zip",exdir="./CourseProject")
 path <- file.path("./CourseProject" , "UCI HAR Dataset")
-files <- list.files(path, recursive=TRUE)
 
 # read in training data
-activity_training <- read.table(file.path(path, "train", "Y_train.txt"),header = FALSE)
+activity_training <- read.table(file.path(path, "train", "y_train.txt"),header = FALSE)
 subject_training <- read.table(file.path(path, "train", "subject_train.txt"),header = FALSE)
 features_training <- read.table(file.path(path, "train", "X_train.txt"),header = FALSE)
 
 # read in test data
-activity_test  <- read.table(file.path(path, "test" , "Y_test.txt" ),header = FALSE)
+activity_test  <- read.table(file.path(path, "test" , "y_test.txt" ),header = FALSE)
 subject_test  <- read.table(file.path(path, "test" , "subject_test.txt"),header = FALSE)
 features_test  <- read.table(file.path(path, "test" , "X_test.txt" ),header = FALSE)
 
@@ -50,4 +49,4 @@ names(data_mean_std) <- gsub("BodyBody", "Body", names(data_mean_std))
 library(plyr)
 TidyData <- aggregate(. ~ subject + activity, data_mean_std, mean)
 TidyData <- TidyData[order(TidyData$subject,TidyData$activity), ]
-write.table(TidyData, file = "TidyData.txt",row.name=FALSE)
+write.table(TidyData, file = "./CourseProject/TidyData.txt",row.name=FALSE)
