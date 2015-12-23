@@ -24,15 +24,15 @@ The data contains information on the following variables:
 
 The following code was used to first create a directory in which the downloaded files are unzipped. The path to these files is used to read in the data to R:
 
-if(!file.exists("./CourseProject")){dir.create("./CourseProject")}
+> if(!file.exists("./CourseProject")){dir.create("./CourseProject")}
 
-Url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+> Url <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 
-download.file(Url,destfile="./CourseProject/Dataset.zip")
+> download.file(Url,destfile="./CourseProject/Dataset.zip")
 
-unzip(zipfile="./CourseProject/Dataset.zip",exdir="./CourseProject")
+> unzip(zipfile="./CourseProject/Dataset.zip",exdir="./CourseProject")
 
-path <- file.path("./CourseProject" , "UCI HAR Dataset")
+> path <- file.path("./CourseProject" , "UCI HAR Dataset")
 
 
 ### Reading in the (training and test) data
