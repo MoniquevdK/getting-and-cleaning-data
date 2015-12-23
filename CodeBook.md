@@ -39,90 +39,90 @@ The following code was used to first create a directory in which the downloaded 
 
 The following code was used to read in the both the training and test data in R, seperately:
 
-activity_training <- read.table(file.path(path, "train", "y_train.txt"),header = FALSE)
+> activity_training <- read.table(file.path(path, "train", "y_train.txt"),header = FALSE)
 
-subject_training <- read.table(file.path(path, "train", "subject_train.txt"),header = FALSE)
+> subject_training <- read.table(file.path(path, "train", "subject_train.txt"),header = FALSE)
 
-features_training <- read.table(file.path(path, "train", "X_train.txt"),header = FALSE)
+> features_training <- read.table(file.path(path, "train", "X_train.txt"),header = FALSE)
 
-activity_test  <- read.table(file.path(path, "test" , "y_test.txt" ),header = FALSE)
+> activity_test  <- read.table(file.path(path, "test" , "y_test.txt" ),header = FALSE)
 
-subject_test  <- read.table(file.path(path, "test" , "subject_test.txt"),header = FALSE)
+> subject_test  <- read.table(file.path(path, "test" , "subject_test.txt"),header = FALSE)
 
-features_test  <- read.table(file.path(path, "test" , "X_test.txt" ),header = FALSE)
+> features_test  <- read.table(file.path(path, "test" , "X_test.txt" ),header = FALSE)
 
 
 ### Merging the training and the test data
 
 Next the training and test datasets are merged to create one data set. The 'complete' three variables are also provided with their appropiate names to improve readability:
 
-activity <- rbind(activity_training, activity_test)
+> activity <- rbind(activity_training, activity_test)
 
-colnames(activity) <-  "activity"
+> colnames(activity) <-  "activity"
 
-features <- rbind(features_training, features_test)
+> features <- rbind(features_training, features_test)
 
-feature_names <- read.table(file.path(path, "features.txt"),head=FALSE)
+> feature_names <- read.table(file.path(path, "features.txt"),head=FALSE)
 
-colnames(features) <- feature_names$V2
+> colnames(features) <- feature_names$V2
 
-subject <- rbind(subject_training, subject_test)
+> subject <- rbind(subject_training, subject_test)
 
-colnames(subject) <- "subject"
+> colnames(subject) <- "subject"
 
-data <- cbind(subject, activity, features)
+> data <- cbind(subject, activity, features)
 
 
 ### Extracting only the measurements on the mean and standard deviation for each measurement
 
 Since the data still consists of many variables and we are only interested in the mean and standard deviation for each measurement, we extract only this part from the data:
 
-mean_std <- sort(c(grep("mean\\(\\)", names(data)), grep("std()", names(data))))
+> mean_std <- sort(c(grep("mean\\(\\)", names(data)), grep("std()", names(data))))
 
-data_mean_std <- data[ , c(1, 2, mean_std)]
+> data_mean_std <- data[ , c(1, 2, mean_std)]
 
 
 ### Using descriptive activity names to name the activities in the data set
 
 To improve readability, the activities names are provided with their appropiate acitivty names with the following code:
 
-activity_labels <- read.table(file.path(path, "activity_labels.txt"), head=FALSE)
+> activity_labels <- read.table(file.path(path, "activity_labels.txt"), head=FALSE)
 
-activity_labels <- as.vector(activity_labels[ , 2])
+> activity_labels <- as.vector(activity_labels[ , 2])
 
-data_mean_std$activity <- factor(data_mean_std$activity, labels=activity_labels)
+> data_mean_std$activity <- factor(data_mean_std$activity, labels=activity_labels)
 
 
 ### Appropriately label the data set with descriptive variable names
 
 To improve readability, the data set is provided with descriptive variable names. This produces a tidy dataset:
 
-names(data_mean_std) <- gsub("^t", "time", names(data_mean_std))
+> names(data_mean_std) <- gsub("^t", "time", names(data_mean_std))
 
-names(data_mean_std) <- gsub("^f", "frequency", names(data_mean_std))
+> names(data_mean_std) <- gsub("^f", "frequency", names(data_mean_std))
 
-names(data_mean_std) <- gsub("Acc", "Accelerometer", names(data_mean_std))
+> names(data_mean_std) <- gsub("Acc", "Accelerometer", names(data_mean_std))
 
-names(data_mean_std) <- gsub("Gyro", "Gyroscope", names(data_mean_std))
+> names(data_mean_std) <- gsub("Gyro", "Gyroscope", names(data_mean_std))
 
-names(data_mean_std) <- gsub("Mag", "Magnitude", names(data_mean_std))
+> names(data_mean_std) <- gsub("Mag", "Magnitude", names(data_mean_std))
 
-names(data_mean_std) <- gsub("BodyBody", "Body", names(data_mean_std))
+> names(data_mean_std) <- gsub("BodyBody", "Body", names(data_mean_std))
 
 
 ### Creating a second, independent tidy data set with the average of each variable for each activity and each subject
 
 As we still have quite a large dataset and we are only interested in the average of each variable for each activity and each subject, we extract this part of the data. This produces a second, tidy dataset:
 
-library(plyr)
+> library(plyr)
 
-TidyData <- aggregate(. ~ subject + activity, data_mean_std, mean)
+> TidyData <- aggregate(. ~ subject + activity, data_mean_std, mean)
 
-TidyData <- TidyData[order(TidyData$subject,TidyData$activity), ]
+> TidyData <- TidyData[order(TidyData$subject,TidyData$activity), ]
 
 
 ### Create a new table for the tidy dataset
 
 Finally, the clean and tidy dataset is stored in your directory:
 
-write.table(TidyData, file = "./CourseProject/TidyData.txt",row.name=FALSE)
+> write.table(TidyData, file = "./CourseProject/TidyData.txt",row.name=FALSE)
